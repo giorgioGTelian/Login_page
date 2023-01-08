@@ -5,16 +5,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Login Interface</title>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
    <!-- Google Font: Source Sans Pro -->
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="all.min.css">
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="icheck-bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="adminlte.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+   <!-- Font Awesome -->
+   <link rel="stylesheet" href="../gt/theme/plugins/fontawesome-free/css/all.min.css">
+   <!-- icheck bootstrap -->
+   <link rel="stylesheet" href="../gt/theme/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+   <!-- Theme style -->
+   <link rel="stylesheet" href="../gt/theme/dist/css/adminlte.min.css">
   <!-- Graphs -->
-  <script src="fetch-data.js"></script>
+  <script src="../gt/fetch-data.js"></script>
+  <script src="../gt/login.php"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+
 
 </head>
 <body class="hold-transition login-page">
@@ -42,32 +48,160 @@
     </div>
     </div>
     <input type="submit" value="Submit">
-    <div class="icheck-primary">
-      <input type="checkbox" id="remember">
-      <label for="remember">
-        Remember Me
-      </label>
+    <div id="chart-container"></div>
     </div>
   </form>
 </div>
 </div>
 </div>
-<div class="social-auth-links text-center mb-3">
-  <p>- OR -</p>
-  <a href="#" class="btn btn-block btn-primary">
-    <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-  </a>
-  <a href="#" class="btn btn-block btn-danger">
-    <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-  </a>
-</div>
-  <!-- Container for the two graphs -->
-  <div id="graphs">
-    <div id="graph1"></div>
-    <div id="graph2"></div>
+
+  <div class="card card-success">
+    <div class="card-header">
+      <h3 class="card-title">Charts</h3>
+
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button type="button" class="btn btn-tool" data-card-widget="remove">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+     <!-- Container for the two graphs -->
+     <div id="container">
+
+    <div class="card-body">
+      <div class="graphs" action="fetch-data.js">
+                 <!-- /.col (LEFT) -->
+                 <div class="col-md-6">
+                  <!-- LINE CHART -->
+                  <div class="card card-info collapsed-card">
+                    <div class="card-header">
+                      <h3 class="card-title">Line Chart</h3>
+      
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="chart graphs1">
+                        <canvas id="lineChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+      
+                  <!-- BAR CHART -->
+                  <div class="card card-success collapsed-card">
+                    <div class="card-header">
+                      <h3 class="card-title">Bar Chart</h3>
+      
+                      <div class="card-tools">
+                        
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                          <i class="fas fa-times"></i>
+                        </button>
+                    
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="chart graphs2">
+                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <!-- /.card -->
+      </div>
+    </div>
+  </div>
+ 
   </div>
 
     <script>
+         const areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+
+var areaChartData = {
+  labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label               : 'Digital Goods',
+      backgroundColor     : 'rgba(60,141,188,0.9)',
+      borderColor         : 'rgba(60,141,188,0.8)',
+      pointRadius          : false,
+      pointColor          : '#3b8bba',
+      pointStrokeColor    : 'rgba(60,141,188,1)',
+      pointHighlightFill  : '#fff',
+      pointHighlightStroke: 'rgba(60,141,188,1)',
+      data                : [28, 48, 40, 19, 86, 27, 90]
+    },
+    {
+      label               : 'Electronics',
+      backgroundColor     : 'rgba(210, 214, 222, 1)',
+      borderColor         : 'rgba(210, 214, 222, 1)',
+      pointRadius         : false,
+      pointColor          : 'rgba(210, 214, 222, 1)',
+      pointStrokeColor    : '#c1c7d1',
+      pointHighlightFill  : '#fff',
+      pointHighlightStroke: 'rgba(220,220,220,1)',
+      data                : [65, 59, 80, 81, 56, 55, 40]
+    },
+  ]
+}
+
+var areaChartOptions = {
+  maintainAspectRatio : false,
+  responsive : true,
+  legend: {
+    display: false
+  },
+  scales: {
+    xAxes: [{
+      gridLines : {
+        display : false,
+      }
+    }],
+    yAxes: [{
+      gridLines : {
+        display : false,
+      }
+    }]
+  }
+}
+
+
+
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    var temp1 = areaChartData.datasets[1]
+    barChartData.datasets[0] = temp1
+    barChartData.datasets[1] = temp0
+
+    var barChartOptions = {
+      responsive              : true,
+      maintainAspectRatio     : false,
+      datasetFill             : false
+    }
+
+    new Chart(barChartCanvas, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions
+    })
     // Schedule the data fetching functions to run at the specified interval
     setInterval(fetchData1, interval);
     setInterval(fetchData2, interval);
@@ -83,7 +217,7 @@
 
     // Send a POST request to the server with the email and password
     $.ajax({
-      url: 'login.php',
+      url: "../gt/login.php",
       type: 'POST',
       data: {
         email: email,
@@ -96,7 +230,7 @@
           sessionStorage.setItem('token', response.token);
 
           // Redirect to the fetch-data.js file
-          window.location.replace('fetch-data.js');
+          window.location.replace("../gt/fetch-data.js");
         } else {
           // Show an error message
           alert('Incorrect email or password');
@@ -110,11 +244,13 @@
   </script>
 
 <!-- jQuery -->
-<script src="jquery.min.js"></script>
+<script src="../gt/theme/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="bootstrap.bundle.min.js"></script>
+<script src="../gt/theme/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="adminlte.min.js"></script>
+<script src="../gt/theme/dist/js/adminlte.min.js"></script>
+<!-- ChartJS -->
+<script src="../gt/theme/plugins/chart.js/Chart.min.js"></script>
 
 </body>
 </html>

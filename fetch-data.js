@@ -1,4 +1,55 @@
 const token = sessionStorage.getItem('token');
+// Function to fetch the data and plot the chart
+function fetchAndPlotData() {
+  $.ajax({
+    url: 'https://cloud.fatturapro.click/junior2023',
+    dataType: 'json',
+    headers: {
+      'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+    },
+    success: function(response) {
+      // Check if the request was successful
+      if (response.status === 0) {
+        // Extract the data from the response
+        var data = response.dataset.map(function(d) {
+          return {
+            x: d.email,
+            y: d.data
+          };
+        });
+  
+        // Plot the data using Highcharts
+        Highcharts.chart('chart-container', {
+          chart: {
+            type: 'bar'
+          },
+          title: {
+            text: 'Chart Title'
+          },
+          xAxis: {
+            type: 'category'
+          },
+          yAxis: {
+            title: {
+              text: 'Y-axis Label'
+            }
+          },
+          series: [{
+            name: 'Series Name',
+            data: data
+          }]
+        });
+      } else {
+        // Show an error message
+        alert('Error fetching data');
+      }
+    }
+  });
+}
+
+// Schedule the data fetching function to run at regular intervals
+setInterval(fetchAndPlotData, 5000);
+
 
 function fetchData() {
   $.ajax({

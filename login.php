@@ -32,10 +32,12 @@ $token = $response;
 echo "<script>var token = '$token';</script>";
 $response_array = json_decode($response, true);
 
-$_SESSION['token'] = $response_array['token'];
+//$_SESSION['token'] = $response_array['token'];
+$chart_url = $response_array['token'];
+
+echo "<script>document.getElementById('chart-iframe').src = '$chart_url';</script>";
 
 
-exit($response);
 $response = json_decode($response, true);
 if (is_array($response)) {
     $response = json_encode($response);
@@ -45,7 +47,7 @@ if (is_array($response)) {
 }
 
 curl_close($ch);
-
+exit($response);
 if (session_start()) {
     $_SESSION['token'] = $response_array['token'];
     header('Location: /index.html');

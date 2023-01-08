@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Login Interface</title>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+   <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+   <!-- Font Awesome -->
+   <link rel="stylesheet" href="../gt/theme/plugins/fontawesome-free/css/all.min.css">
+   <!-- icheck bootstrap -->
+   <link rel="stylesheet" href="../gt/theme/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+   <!-- Theme style -->
+   <link rel="stylesheet" href="../gt/theme/dist/css/adminlte.min.css">
+  <!-- Graphs -->
+  <script src="../gt/fetch-data.js"></script>
+  <script src="../gt/login.php"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+
+
+</head>
+<body>
+    <iframe id="chart-iframe" src="https://cloud.fatturapro.click/junior2023?token=<?php echo urlencode($_SESSION['token']); ?>&graph=1"></iframe>
+
+
+    <div id="chart-container"></div>
+    <script>
+        var token = '$token';
+        document.getElementById('chart-iframe').src = '$chart_url';
+
+        setInterval(function() {
+  document.getElementById('chart-iframe').src = '$chart_url';
+}, 5000); // update the chart every 5 seconds
+
+
+    </script>
+</body>
+</html>
