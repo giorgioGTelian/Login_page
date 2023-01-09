@@ -80,4 +80,30 @@ $response = curl_exec($ch);
 
 echo "<script>var token = '$token';</script>";
 
+$response_array = json_decode($response, true);
+
+// Check if the response is an array and if the "status" key exists in the array
+if (is_array($response_array) && array_key_exists('status', $response_array)) {
+  // Save the data from the "dataset" key in a new array
+  $data_array = $response_array['dataset'];
+}
+
+$data_json = json_encode($data_array);
+echo "<script>var data = '$data_json';</script>";
+
+$response_array = [
+    'status' => 0,
+    'dataset' => [
+        ['email' => 'test1@test.it', 'data' => 10],
+        ['email' => 'test2@test.it', 'data' => 20]
+    ]
+];
+
+echo "<script>var data = " . json_encode($response_array) . ";</script>";
+
+$response_array = json_decode($response, true);
+$response_json = json_encode($response_array);
+
+echo "<iframe id='chart-iframe' src='fetch-data.php?response=$response_json'></iframe>";
+
 ?>
