@@ -29,6 +29,43 @@ curl_setopt($ch, CURLOPT_URL, 'https://cloud.fatturapro.click/junior2023/');
 $response = curl_exec($ch);
 $token = $response;
 
+$response = json_decode($response, true);
+if (is_array($response)) {
+    $response = json_encode($response);
+    echo $response;
+} else {
+    echo 'Error: $response is not an array';
+}
+
+curl_close($ch);
+exit($response);
+if (session_start()) {
+    $_SESSION['token'] = $response_array['token'];
+    header('Location: /index.html');
+    exit;
+} else {
+    echo '<p>Error starting the session</p>';
+}
+       
+ 
+$response_array = json_decode($response, true);
+if ($response_array['status'] === 0) {
+    $_SESSION['token'] = $response_array['token'];
+    header('Location: /index.html');
+    exit;
+}
+    
+if ($response !== false) {
+    $data = json_decode($response, true);
+    if (isset($data['token'])) {
+        $_SESSION['token'] = $data['token'];
+    } else {
+        echo '<p>Incorrect email or password</p>';
+    }
+} else {
+    echo '<p>Error connecting to the server</p>';
+}
+
 if (isset($_GET['token'])) {
   $token = htmlspecialchars($_GET['token']);
   // Save the token in a session variable or a database
