@@ -70,19 +70,28 @@ if ($err) {
 // Get the token from the headers
 $headers = getallheaders();
 $token = $headers["token"];
+// Check if token is provided
+if(!isset($_SERVER['HTTP_TOKEN'])) {
+    http_response_code(401);
+    echo "Unauthorized";
+    exit();
+}
 
-if ($token == "YOUR_TOKEN") {
-  // Get the data
-  $data1 = getData1();
-  $data2 = getData2();
+// Check if token is valid
+if($_SERVER['HTTP_TOKEN'] !== "YOUR_TOKEN") {
+    http_response_code(401);
+    echo "Invalid token";
+    exit();
+}
 
-  // Return the data as a JSON object
-  header('Content-Type: application/json');
-  echo json_encode(array("data1" => $data1, "data2" => $data2));
-} else {
-  http_response_code(401);  // unauthorized
-  echo "Invalid token";
-} 
+// Get the data
+$data1 = getData1();
+$data2 = getData2();
+
+// Return the data as a JSON object
+header('Content-Type: application/json');
+echo json_encode(array("data1" => $data1, "data2" => $data2));
+  
 
 //Get data1 and data2 here
 function getData1() {
@@ -154,7 +163,7 @@ function getData2() {
   }
 
 }
-}
+
 
 
 ?>
