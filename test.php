@@ -66,4 +66,95 @@ if ($err) {
   echo $response;
 }
 
+<?php
+// Get the token from the headers
+$headers = getallheaders();
+$token = $headers["token"];
+
+if ($token == "YOUR_TOKEN") {
+  // Get the data
+  $data1 = getData1();
+  $data2 = getData2();
+
+  // Return the data as a JSON object
+  header('Content-Type: application/json');
+  echo json_encode(array("data1" => $data1, "data2" => $data2));
+} else {
+  http_response_code(401);  // unauthorized
+  echo "Invalid token";
+}
+
+//Get data1 and data2 here
+function getData1() {
+  
+  //cURL logic
+  $curl = curl_init();
+
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => "https://cloud.fatturapro.click/junior2023/?graphic=",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET",
+    CURLOPT_HTTPHEADER => array(
+      "Accept: application/json",
+      "Content-Type: application/x-www-form-urlencoded",
+      "token: YOUR_TOKEN"
+    ),
+  ));
+
+  $response = curl_exec($curl);
+  $err = curl_error($curl);
+
+  curl_close($curl);
+
+  // return the response
+  if ($err) {
+    return "cURL Error #:" . $err;
+  } else {
+    return json_decode($response);
+  }
+
+}
+
+}
+
+function getData2() {
+  
+  //cURL logic
+  $curl = curl_init();
+
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => "https://cloud.fatturapro.click/junior2023/?graphic=",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET",
+    CURLOPT_HTTPHEADER => array(
+      "Accept: application/json",
+      "Content-Type: application/x-www-form-urlencoded",
+      "token: YOUR_TOKEN"
+    ),
+  ));
+
+  $response = curl_exec($curl);
+  $err = curl_error($curl);
+
+  curl_close($curl);
+
+  // return the response
+  if ($err) {
+    return "cURL Error #:" . $err;
+  } else {
+    return json_decode($response);
+  }
+
+}
+}
+
+
 ?>
