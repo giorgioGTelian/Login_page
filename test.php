@@ -82,7 +82,7 @@ if ($token == "YOUR_TOKEN") {
 } else {
   http_response_code(401);  // unauthorized
   echo "Invalid token";
-}
+} 
 
 //Get data1 and data2 here
 function getData1() {
